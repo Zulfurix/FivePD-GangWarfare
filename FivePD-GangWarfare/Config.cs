@@ -16,7 +16,7 @@ namespace FivePD_GangWarfare
 
         public Config()
         {
-            dynamic jsonText = JsonConvert.DeserializeObject("callouts/FivePD-GangWarfareConfig,json");
+            dynamic jsonText = JsonConvert.DeserializeObject("callouts/FivePD-GangWarfareConfig.json");
             if (jsonText != null)
             {
                 maxAmountOfMembers = jsonText.config.gangs.maxAmountOfMembers;
