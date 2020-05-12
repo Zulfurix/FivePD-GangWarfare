@@ -56,6 +56,7 @@ namespace FivePD_GangWarfare
         public GangWarfare()
         {
             InitBase(Locations[rnd.Next(Locations.Length)]);
+            Config.LoadConfig();
 
             // Callout Details
             this.ShortName = "Gang Warfare";

@@ -6,22 +6,32 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
 using Newtonsoft.Json;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace FivePD_GangWarfare
 {
     class Config : BaseScript
     {
-        public static int maxAmountOfMembers;
         public static int minAmountOfMembers;
+        public static int maxAmountOfMembers;
 
-        public Config()
+        public static void LoadConfig()
         {
-            dynamic jsonText = JsonConvert.DeserializeObject("callouts/FivePD-GangWarfareConfig.json");
-            if (jsonText != null)
+            string jsonText = LoadResourceFile("fivepd", "callouts/FivePD-GangWarfareConfig.json");
+            dynamic configFile = JsonConvert.DeserializeObject(jsonText);
+            /*try
             {
-                maxAmountOfMembers = jsonText.config.gangs.maxAmountOfMembers;
-                minAmountOfMembers = jsonText.config.gangs.mminmountOfMembers;
+                minAmountOfMembers = configFile["config"]["minAmountOfMembers"];
+                maxAmountOfMembers = configFile["config"]["maxAmountOfMembers"];
             }
+            catch (Exception ex)
+            {
+                minAmountOfMembers = 1;
+                maxAmountOfMembers = 1;
+            }*/
+            minAmountOfMembers = (int)configFile["config"]["minAmountOfMembers"];
+            maxAmountOfMembers = (int)configFile["config"]["maxAmountOfMembers"];
         }
 
     }
