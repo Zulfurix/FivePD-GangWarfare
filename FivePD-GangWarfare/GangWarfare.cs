@@ -66,7 +66,7 @@ namespace FivePD_GangWarfare
 
         public async override Task Init()
         {
-            numOfSuspects = rnd.Next(minAmountOfMembers, maxAmountOfMembers);
+            numOfSuspects = rnd.Next(Config.minAmountOfMembers, Config.maxAmountOfMembers);
             SuspectsA = new Ped[numOfSuspects];
             SuspectsB = new Ped[numOfSuspects];
             OnAccept();

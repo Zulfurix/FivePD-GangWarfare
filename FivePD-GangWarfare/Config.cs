@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
-using Newtonsoft.Json
+using Newtonsoft.Json;
 
 namespace FivePD_GangWarfare
 {
@@ -16,11 +16,11 @@ namespace FivePD_GangWarfare
 
         public Config()
         {
-            dynamic jsonText = Newtonsoft.Json.JsonConvert.DeserializeObject("callouts/FivePD-GangWarfareConfig,json");
+            dynamic jsonText = JsonConvert.DeserializeObject("callouts/FivePD-GangWarfareConfig,json");
             if (jsonText != null)
             {
-                maxAmountOfMembers = jsonText.config.maxAmountOfMembers;
-                minAmountOfMembers = jsonText.config.mminmountOfMembers;
+                maxAmountOfMembers = jsonText.config.gangs.maxAmountOfMembers;
+                minAmountOfMembers = jsonText.config.gangs.mminmountOfMembers;
             }
         }
 
