@@ -15,6 +15,7 @@ namespace FivePD_GangWarfare
         Random rnd = new Random();
 
         Ped[] SuspectsA, SuspectsB;
+        Vehicle ambientVeh;
         int numOfSuspects;
 
         Vector3[] Locations =
@@ -53,6 +54,14 @@ namespace FivePD_GangWarfare
             WeaponHash.Pistol,
             WeaponHash.PumpShotgun,
             WeaponHash.MiniSMG
+        };
+
+        VehicleHash[] AmbientVehicles =
+        {
+            VehicleHash.Emperor,
+            VehicleHash.Intruder,
+            VehicleHash.Manana,
+            VehicleHash.Tornado
         };
 
         public GangWarfare()
@@ -98,6 +107,13 @@ namespace FivePD_GangWarfare
                 SetPedCombatAttributes(SuspectsB[i].Handle, 45, true);
             }
 
+            // Create ambient vehicle
+            if (rnd.Next(0, 100) < Config.ambientVehicleChance)
+            {
+                ambientVeh = await World.CreateVehicle(AmbientVehicles[rnd.Next(AmbientVehicles.Length)], Location, rnd.Next(360));
+                ambientVeh.IsEngineRunning = true;
+                ambientVeh.AreLightsOn = true;
+            }
         }
 
         public override void OnStart(Ped player)
@@ -119,6 +135,11 @@ namespace FivePD_GangWarfare
 
             // Trigger gunfight between peds
             SuspectsA[0].Task.ShootAt(SuspectsB[0]);
+
+            if (ambientVeh != null)
+            {
+                ambientVeh.MarkAsNoLongerNeeded();
+            }
 
             Tick += Update;
         }

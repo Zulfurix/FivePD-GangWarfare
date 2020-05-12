@@ -1,6 +1,7 @@
 {
 	"config": {
-			"maxAmountOfMembers": 10,
-			"minAmountOfMembers": 2
+		"maxAmountOfMembers": 10,
+		"minAmountOfMembers": 2,
+		"ambientVehicleChance": 65
 	}
 }

@@ -15,23 +15,25 @@ namespace FivePD_GangWarfare
     {
         public static int minAmountOfMembers;
         public static int maxAmountOfMembers;
+        public static int ambientVehicleChance;
 
         public static void LoadConfig()
         {
             string jsonText = LoadResourceFile("fivepd", "callouts/FivePD-GangWarfareConfig.json");
             dynamic configFile = JsonConvert.DeserializeObject(jsonText);
-            /*try
+            try
             {
-                minAmountOfMembers = configFile["config"]["minAmountOfMembers"];
-                maxAmountOfMembers = configFile["config"]["maxAmountOfMembers"];
+                minAmountOfMembers = (int)configFile["config"]["minAmountOfMembers"];
+                maxAmountOfMembers = (int)configFile["config"]["maxAmountOfMembers"];
+                ambientVehicleChance = (int)configFile["config"]["ambientVehicleChance"];
             }
             catch (Exception ex)
             {
                 minAmountOfMembers = 1;
                 maxAmountOfMembers = 1;
-            }*/
-            minAmountOfMembers = (int)configFile["config"]["minAmountOfMembers"];
-            maxAmountOfMembers = (int)configFile["config"]["maxAmountOfMembers"];
+                ambientVehicleChance = 50;
+            }
+
         }
 
     }
