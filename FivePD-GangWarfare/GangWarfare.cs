@@ -12,8 +12,6 @@ namespace FivePD_GangWarfare
     [CalloutProperties("Gang Warfare", "Zulfurix", "1.0", Probability.Low)]
     public class GangWarfare : CalloutAPI.Callout
     {
-        static int maxAmountOfMembers = 10;
-        static int minAmountOfMembers = 2;
         Random rnd = new Random();
 
         Ped[] SuspectsA, SuspectsB;

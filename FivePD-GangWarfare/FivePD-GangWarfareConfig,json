@@ -1,0 +1,8 @@
+{
+	"config": {
+		"gangs": {
+			"maxAmountOfMembers":10,
+			"minAmountOfMembers":2
+		}
+	}
+}
