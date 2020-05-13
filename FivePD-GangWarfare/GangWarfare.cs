@@ -99,7 +99,7 @@ namespace FivePD_GangWarfare
                 ////////// TEAM B //////////
                 SuspectsB[i] = await SpawnPed(PedModelsB[rnd.Next(0, PedModelsB.Length)], Location + new Vector3(i * 2.5f, -12, 0));
                 SuspectsB[i].RelationshipGroup = GetHashKey("AMBIENT_GANG_BALLAS");
-                SuspectsA[i].Health = 250;
+                SuspectsB[i].Health = 250;
 
                 // Weapon Attributes
                 SuspectsB[i].Accuracy = 0;
