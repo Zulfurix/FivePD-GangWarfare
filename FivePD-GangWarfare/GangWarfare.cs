@@ -114,7 +114,7 @@ namespace FivePD_GangWarfare
             // Create ambient vehicle
             if (rnd.Next(0, 100) < Config.ambientVehicleChance)
             {
-                ambientVeh = await World.CreateVehicle(AmbientVehicles[rnd.Next(AmbientVehicles.Length)], Location, rnd.Next(360));
+                ambientVeh = await SpawnVehicle(AmbientVehicles[rnd.Next(AmbientVehicles.Length)], Location, rnd.Next(360));
                 ambientVeh.IsEngineRunning = true;
                 ambientVeh.AreLightsOn = true;
             }
