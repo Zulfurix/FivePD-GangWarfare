@@ -73,7 +73,7 @@ namespace FivePD_GangWarfare
             this.ShortName = "Gang Warfare";
             this.CalloutDescription = "Gang warfare has broken out in the local area between two parties of individuals.";
             this.ResponseCode = 3;
-            this.StartDistance = 200f;
+            this.StartDistance = 100f;
         }
 
         public async override Task Init()
@@ -83,12 +83,16 @@ namespace FivePD_GangWarfare
             SuspectsB = new Ped[numOfSuspects];
             OnAccept();
 
+            // Create relationship groups
+            World.AddRelationshipGroup("GANG_A");
+            World.AddRelationshipGroup("GANG_B");
+
             // Set up entities for Teams A and B
             for (int i = 0; i < numOfSuspects; i++)
             {
                 ////////// TEAM A //////////
                 SuspectsA[i] = await SpawnPed(PedModelsA[rnd.Next(0, PedModelsA.Length)], Location + new Vector3(i * 2.5f, 12, 0));
-                SuspectsA[i].RelationshipGroup = GetHashKey("AMBIENT_GANG_MEXICAN");
+                SuspectsA[i].RelationshipGroup = GetHashKey("GANG_A");
                 SuspectsA[i].Health = 250;
 
                 // Weapon Attributes
@@ -98,7 +102,7 @@ namespace FivePD_GangWarfare
 
                 ////////// TEAM B //////////
                 SuspectsB[i] = await SpawnPed(PedModelsB[rnd.Next(0, PedModelsB.Length)], Location + new Vector3(i * 2.5f, -12, 0));
-                SuspectsB[i].RelationshipGroup = GetHashKey("AMBIENT_GANG_BALLAS");
+                SuspectsB[i].RelationshipGroup = GetHashKey("GANG_B");
                 SuspectsB[i].Health = 250;
 
                 // Weapon Attributes
@@ -120,18 +124,18 @@ namespace FivePD_GangWarfare
         {
             base.OnStart(player);
             // Relationship between gang 1 and gang 2
-            SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("AMBIENT_GANG_MEXICAN"), (uint)GetHashKey("AMBIENT_GANG_BALLAS"));    
-            SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("AMBIENT_GANG_BALLAS"), (uint)GetHashKey("AMBIENT_GANG_MEXICAN"));
+            SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("GANG_A"), (uint)GetHashKey("GANG_B"));    
+            SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("GANG_B"), (uint)GetHashKey("GANG_A"));
 
             // Relationship between player and gang 1 / gang 2
-            SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("AMBIENT_GANG_MEXICAN"), (uint)GetHashKey("PLAYER"));
-            SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("PLAYER"), (uint)GetHashKey("AMBIENT_GANG_MEXICAN"));
-            SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("AMBIENT_GANG_BALLAS"), (uint)GetHashKey("PLAYER"));
-            SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("PLAYER"), (uint)GetHashKey("AMBIENT_GANG_BALLAS"));
+            SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("PLAYER"), (uint)GetHashKey("GANG_A"));
+            SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("GANG_A"), (uint)GetHashKey("PLAYER"));
+            SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("PLAYER"), (uint)GetHashKey("GANG_B"));
+            SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("GANG_B"), (uint)GetHashKey("PLAYER"));
 
             // Relationship between gang 1 / gang 1 & gang 2 / gang 2
-            SetRelationshipBetweenGroups((int)Relationship.Companion, (uint)GetHashKey("AMBIENT_GANG_MEXICAN"), (uint)GetHashKey("AMBIENT_GANG_MEXICAN"));
-            SetRelationshipBetweenGroups((int)Relationship.Companion, (uint)GetHashKey("AMBIENT_GANG_BALLAS"), (uint)GetHashKey("AMBIENT_GANG_BALLAS"));
+            SetRelationshipBetweenGroups((int)Relationship.Companion, (uint)GetHashKey("GANG_A"), (uint)GetHashKey("GANG_A"));
+            SetRelationshipBetweenGroups((int)Relationship.Companion, (uint)GetHashKey("GANG_B"), (uint)GetHashKey("GANG_B"));
 
             // Trigger gunfight between peds
             SuspectsA[0].Task.ShootAt(SuspectsB[0]);
@@ -144,14 +148,30 @@ namespace FivePD_GangWarfare
             Tick += Update;
         }
 
+        private void ClearAllRelationships()
+        {
+            // Relationship between gang 1 and gang 2
+            ClearRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("GANG_A"), (uint)GetHashKey("GANG_B"));
+            ClearRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("GANG_B"), (uint)GetHashKey("GANG_A"));
+
+            // Relationship between player and gang 1 / gang 2
+            ClearRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("PLAYER"), (uint)GetHashKey("GANG_A"));
+            ClearRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("GANG_A"), (uint)GetHashKey("PLAYER"));
+            ClearRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("PLAYER"), (uint)GetHashKey("GANG_B"));
+            ClearRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("GANG_B"), (uint)GetHashKey("PLAYER"));
+
+            // Relationship between gang 1 / gang 1 & gang 2 / gang 2
+            ClearRelationshipBetweenGroups((int)Relationship.Companion, (uint)GetHashKey("GANG_A"), (uint)GetHashKey("GANG_A"));
+            ClearRelationshipBetweenGroups((int)Relationship.Companion, (uint)GetHashKey("GANG_B"), (uint)GetHashKey("GANG_B"));
+
+            RemoveRelationshipGroup((uint)GetHashKey("GANG_B"));
+            RemoveRelationshipGroup((uint)GetHashKey("GANG_A"));
+        }
+
         public override void OnCancelBefore()
         {
+            ClearAllRelationships();
             base.OnCancelBefore();
-            // Relationship between player and gang 1 / gang 2
-            ClearRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("AMBIENT_GANG_MEXICAN"), (uint)GetHashKey("PLAYER"));
-            ClearRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("PLAYER"), (uint)GetHashKey("AMBIENT_GANG_MEXICAN"));
-            ClearRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("AMBIENT_GANG_BALLAS"), (uint)GetHashKey("PLAYER"));
-            ClearRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("PLAYER"), (uint)GetHashKey("AMBIENT_GANG_BALLAS"));
         }
 
         private async Task Update()
