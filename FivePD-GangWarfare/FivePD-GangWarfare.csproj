@@ -31,11 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CalloutAPI.net">
-      <HintPath>.\CalloutAPI.net.dll</HintPath>
-    </Reference>
     <Reference Include="CitizenFX.Core">
       <HintPath>D:\Games\FiveM\FiveM.app\citizen\clr2\lib\mono\4.5\CitizenFX.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FivePD.net">
+      <HintPath>.\FivePD.net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>.\Newtonsoft.Json.dll</HintPath>

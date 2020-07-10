@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
-using CalloutAPI;
+using FivePD.API;
 
 namespace FivePD_GangWarfare
 {
-    [CalloutProperties("Gang Warfare", "Zulfurix", "1.0", Probability.Low)]
-    public class GangWarfare : CalloutAPI.Callout
+    [CalloutProperties("Gang Warfare", "Zulfurix", "1.0.2")]
+    public class GangWarfare : FivePD.API.Callout
     {
         Random rnd = new Random();
 
@@ -66,7 +66,7 @@ namespace FivePD_GangWarfare
 
         public GangWarfare()
         {
-            InitBase(Locations[rnd.Next(Locations.Length)]);
+            InitInfo(Locations[rnd.Next(Locations.Length)]);
             Config.LoadConfig();
 
             // Callout Details
@@ -76,12 +76,13 @@ namespace FivePD_GangWarfare
             this.StartDistance = 100f;
         }
 
-        public async override Task Init()
+        public async override Task OnAccept()
         {
+            InitBlip();
+
             numOfSuspects = rnd.Next(Config.minAmountOfMembers, Config.maxAmountOfMembers);
             SuspectsA = new Ped[numOfSuspects];
             SuspectsB = new Ped[numOfSuspects];
-            OnAccept();
 
             // Create relationship groups
             World.AddRelationshipGroup("GANG_A");
