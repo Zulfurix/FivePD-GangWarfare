@@ -17,21 +17,71 @@ namespace FivePD_GangWarfare
         public static int maxAmountOfMembers;
         public static int ambientVehicleChance;
 
+        public static string[] ambientVehicleModels;
+        public static string[] weaponModels;
+        public static string[] pedModelsA;
+        public static string[] pedModelsB;
+
+
         public static void LoadConfig()
         {
-            string jsonText = LoadResourceFile("fivepd", "callouts/FivePD-GangWarfareConfig.json");
+            string jsonText = LoadResourceFile("fivepd", "callouts/FivePD-GangWarfare/FivePD-GangWarfareConfig.json");
             dynamic configFile = JsonConvert.DeserializeObject(jsonText);
             try
             {
                 minAmountOfMembers = (int)configFile["config"]["minAmountOfMembers"];
                 maxAmountOfMembers = (int)configFile["config"]["maxAmountOfMembers"];
-                ambientVehicleChance = (int)configFile["config"]["ambientVehicleChance"];
+                ambientVehicleChance = (int)configFile["config"]["ambientVehicle"]["ambientVehicleChance"];
+
+                // Parse stored vehicle model strings
+                JArray jarr = (JArray)configFile["config"]["ambientVehicle"]["vehicleModels"];
+                ambientVehicleModels = jarr.ToObject<string[]>();
+                Debug.WriteLine("[FivePD-GangWarfare]: Parsed " + ambientVehicleModels.Length + " vehicles");
+
+                // Parse stored weapon model strings
+                jarr = (JArray)configFile["config"]["weapons"];
+                weaponModels = jarr.ToObject<string[]>();
+                Debug.WriteLine("[FivePD-GangWarfare]: Parsed " + weaponModels.Length + " weapons");
+
+                // Parse stored gang ped model strings
+                jarr = (JArray)configFile["config"]["gangPedModels"]["gangA"];
+                pedModelsA = jarr.ToObject<string[]>();
+
+                jarr = (JArray)configFile["config"]["gangPedModels"]["gangB"];
+                pedModelsB = jarr.ToObject<string[]>();
+
+                Debug.WriteLine("[FivePD-GangWarfare]: Parsed " + (pedModelsA.Length + pedModelsB.Length) + " ped models");
             }
             catch (Exception ex)
             {
+                // Fallback to these values in the case of an IO exception
+
                 minAmountOfMembers = 1;
                 maxAmountOfMembers = 1;
                 ambientVehicleChance = 50;
+
+                ambientVehicleModels = new string[] 
+                { 
+                    "Emperor"
+                };
+
+                weaponModels = new string[]
+                {
+                    "Pistol"
+                };
+
+                pedModelsA = new string[]
+                {
+                    "BallaEast01GMY"
+                };
+
+                pedModelsB = new string[]
+                {
+                    "Vagos01GFY"
+                };
+
+                Debug.WriteLine("[FivePD-GangWarfare]: " + ex.Message);
+                Debug.WriteLine("[FivePD-GangWarfare]: Fallback values will be used for configuration!");
             }
 
         }

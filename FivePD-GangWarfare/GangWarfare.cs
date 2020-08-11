@@ -9,7 +9,7 @@ using FivePD.API;
 
 namespace FivePD_GangWarfare
 {
-    [CalloutProperties("Gang Warfare", "Zulfurix", "1.0.2")]
+    [CalloutProperties("Gang Warfare", "Zulfurix", "1.0.3")]
     public class GangWarfare : FivePD.API.Callout
     {
         Random rnd = new Random();
@@ -35,35 +35,6 @@ namespace FivePD_GangWarfare
             new Vector3(-89, -1424, 30)
         };
 
-        PedHash[] PedModelsA =
-        {
-            PedHash.BallaEast01GMY,
-            PedHash.BallaOrig01GMY,
-            PedHash.Ballas01GFY
-        };
-
-        PedHash[] PedModelsB =
-        {
-            PedHash.Vagos01GFY,
-            PedHash.MexGoon03GMY,
-            PedHash.MexGoon01GMY
-        };
-
-        WeaponHash[] Weapons =
-        {
-            WeaponHash.Pistol,
-            WeaponHash.PumpShotgun,
-            WeaponHash.MiniSMG
-        };
-
-        VehicleHash[] AmbientVehicles =
-        {
-            VehicleHash.Emperor,
-            VehicleHash.Intruder,
-            VehicleHash.Manana,
-            VehicleHash.Tornado
-        };
-
         public GangWarfare()
         {
             InitInfo(Locations[rnd.Next(Locations.Length)]);
@@ -73,7 +44,7 @@ namespace FivePD_GangWarfare
             this.ShortName = "Gang Warfare";
             this.CalloutDescription = "Gang warfare has broken out in the local area between two parties of individuals.";
             this.ResponseCode = 3;
-            this.StartDistance = 100f;
+            this.StartDistance = 125f;
         }
 
         public async override Task OnAccept()
@@ -91,31 +62,38 @@ namespace FivePD_GangWarfare
             // Set up entities for Teams A and B
             for (int i = 0; i < numOfSuspects; i++)
             {
+                Debug.WriteLine("Team Members " + i);
+
                 ////////// TEAM A //////////
-                SuspectsA[i] = await SpawnPed(PedModelsA[rnd.Next(0, PedModelsA.Length)], Location + new Vector3(i * 2.5f, 12, 0));
+                PedHash generatedPedHash = (PedHash)GetHashKey(Config.pedModelsA[rnd.Next(0, Config.pedModelsA.Length)]);
+                SuspectsA[i] = await SpawnPed(generatedPedHash, Location + new Vector3(i * 2.5f, 12, 0));
                 SuspectsA[i].RelationshipGroup = GetHashKey("GANG_A");
                 SuspectsA[i].Health = 250;
 
                 // Weapon Attributes
+                WeaponHash generatedWeaponHash = (WeaponHash)GetHashKey(Config.weaponModels[rnd.Next(Config.weaponModels.Length)]);
                 SuspectsA[i].Accuracy = 0;
-                SuspectsA[i].Weapons.Give(Weapons[rnd.Next(Weapons.Length)], 1000, true, true);
+                SuspectsA[i].Weapons.Give(generatedWeaponHash, 1000, true, true);
                 SetPedCombatAttributes(SuspectsA[i].Handle, 45, true);
 
                 ////////// TEAM B //////////
-                SuspectsB[i] = await SpawnPed(PedModelsB[rnd.Next(0, PedModelsB.Length)], Location + new Vector3(i * 2.5f, -12, 0));
+                generatedPedHash = (PedHash)GetHashKey(Config.pedModelsB[rnd.Next(0, Config.pedModelsB.Length)]);
+                SuspectsB[i] = await SpawnPed(generatedPedHash, Location + new Vector3(i * 2.5f, -12, 0));
                 SuspectsB[i].RelationshipGroup = GetHashKey("GANG_B");
                 SuspectsB[i].Health = 250;
 
                 // Weapon Attributes
+                generatedWeaponHash = (WeaponHash)GetHashKey(Config.weaponModels[rnd.Next(Config.weaponModels.Length)]);
                 SuspectsB[i].Accuracy = 0;
-                SuspectsB[i].Weapons.Give(Weapons[rnd.Next(Weapons.Length)], 1000, true, true);
+                SuspectsB[i].Weapons.Give(generatedWeaponHash, 1000, true, true);
                 SetPedCombatAttributes(SuspectsB[i].Handle, 45, true);
             }
 
             // Create ambient vehicle
             if (rnd.Next(0, 100) < Config.ambientVehicleChance)
             {
-                ambientVeh = await SpawnVehicle(AmbientVehicles[rnd.Next(AmbientVehicles.Length)], Location, rnd.Next(360));
+                VehicleHash generatedVehicleHash = (VehicleHash)GetHashKey(Config.ambientVehicleModels[rnd.Next(Config.ambientVehicleModels.Length)]);
+                ambientVeh = await SpawnVehicle(generatedVehicleHash, Location, rnd.Next(360));
                 ambientVeh.IsEngineRunning = true;
                 ambientVeh.AreLightsOn = true;
             }
@@ -124,6 +102,7 @@ namespace FivePD_GangWarfare
         public override void OnStart(Ped player)
         {
             base.OnStart(player);
+
             // Relationship between gang 1 and gang 2
             SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("GANG_A"), (uint)GetHashKey("GANG_B"));    
             SetRelationshipBetweenGroups((int)Relationship.Hate, (uint)GetHashKey("GANG_B"), (uint)GetHashKey("GANG_A"));
@@ -145,8 +124,6 @@ namespace FivePD_GangWarfare
             {
                 ambientVeh.MarkAsNoLongerNeeded();
             }
-
-            Tick += Update;
         }
 
         private void ClearAllRelationships()
@@ -173,11 +150,6 @@ namespace FivePD_GangWarfare
         {
             ClearAllRelationships();
             base.OnCancelBefore();
-        }
-
-        private async Task Update()
-        {
-            await BaseScript.Delay(100);
         }
     }
 }

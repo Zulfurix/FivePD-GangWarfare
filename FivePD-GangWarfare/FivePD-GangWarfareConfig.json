@@ -2,6 +2,31 @@
 	"config": {
 		"maxAmountOfMembers": 10,
 		"minAmountOfMembers": 2,
-		"ambientVehicleChance": 65
+		"ambientVehicle": {
+			"ambientVehicleChance": 65,
+			"vehicleModels": [
+				"Emperor",
+				"Intruder",
+				"Manana",
+				"Tornado"
+			]
+		},
+		"gangPedModels": {
+			"gangA": [
+				"BallaEast01GMY",
+				"BallaOrig01GMY",
+				"Ballas01GFY"
+			],
+			"gangB": [
+				"Vagos01GFY",
+				"MexGoon03GMY",
+				"MexGoon01GMY"
+			]
+		},
+		"weapons": [
+			"Pistol",
+			"PumpShotgun",
+			"MiniSMG"
+		]
 	}
 }
