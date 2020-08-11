@@ -62,8 +62,6 @@ namespace FivePD_GangWarfare
             // Set up entities for Teams A and B
             for (int i = 0; i < numOfSuspects; i++)
             {
-                Debug.WriteLine("Team Members " + i);
-
                 ////////// TEAM A //////////
                 PedHash generatedPedHash = (PedHash)GetHashKey(Config.pedModelsA[rnd.Next(0, Config.pedModelsA.Length)]);
                 SuspectsA[i] = await SpawnPed(generatedPedHash, Location + new Vector3(i * 2.5f, 12, 0));

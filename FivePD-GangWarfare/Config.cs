@@ -30,8 +30,13 @@ namespace FivePD_GangWarfare
             try
             {
                 minAmountOfMembers = (int)configFile["config"]["minAmountOfMembers"];
+                Debug.WriteLine("[FivePD-GangWarfare]: Setting => minimum of " + minAmountOfMembers + " gang members");
+
                 maxAmountOfMembers = (int)configFile["config"]["maxAmountOfMembers"];
+                Debug.WriteLine("[FivePD-GangWarfare]: Setting => maximum of " + maxAmountOfMembers + " gang members");
+
                 ambientVehicleChance = (int)configFile["config"]["ambientVehicle"]["ambientVehicleChance"];
+                Debug.WriteLine("[FivePD-GangWarfare]: Setting => " + ambientVehicleChance + " chance of ambient vehicle spawning");
 
                 // Parse stored vehicle model strings
                 JArray jarr = (JArray)configFile["config"]["ambientVehicle"]["vehicleModels"];

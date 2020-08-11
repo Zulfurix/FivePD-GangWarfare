@@ -13,20 +13,22 @@
 		},
 		"gangPedModels": {
 			"gangA": [
-				"BallaEast01GMY",
-				"BallaOrig01GMY",
-				"Ballas01GFY"
+				"g_m_y_ballaeast_01",
+				"g_m_y_ballaorig_01",
+				"g_m_y_ballasout_01",
+				"g_f_y_ballas_01"
 			],
 			"gangB": [
-				"Vagos01GFY",
-				"MexGoon03GMY",
-				"MexGoon01GMY"
+				"g_f_y_vagos_01",
+				"g_m_y_pologoon_01",
+				"g_m_y_salvagoon_01",
+				"g_m_y_salvaboss_01"
 			]
 		},
 		"weapons": [
-			"Pistol",
-			"PumpShotgun",
-			"MiniSMG"
+			"weapon_pistol",
+			"weapon_pumpshotgun",
+			"weapon_microsmg"
 		]
 	}
 }
