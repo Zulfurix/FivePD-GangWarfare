@@ -32,7 +32,10 @@ namespace FivePD_GangWarfare
             new Vector3(236, -1723, 29),
             new Vector3(913, -1240, 26),
             new Vector3(-178, -1301, 31),
-            new Vector3(-89, -1424, 30)
+            new Vector3(-89, -1424, 30),
+            new Vector3(127, -410, 41),
+            new Vector3(1170, -1668, 36),
+            new Vector3(621, -692, 13)
         };
 
         public GangWarfare()

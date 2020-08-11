@@ -30,23 +30,18 @@ namespace FivePD_GangWarfare
             try
             {
                 minAmountOfMembers = (int)configFile["config"]["minAmountOfMembers"];
-                Debug.WriteLine("[FivePD-GangWarfare]: Setting => minimum of " + minAmountOfMembers + " gang members");
 
                 maxAmountOfMembers = (int)configFile["config"]["maxAmountOfMembers"];
-                Debug.WriteLine("[FivePD-GangWarfare]: Setting => maximum of " + maxAmountOfMembers + " gang members");
 
                 ambientVehicleChance = (int)configFile["config"]["ambientVehicle"]["ambientVehicleChance"];
-                Debug.WriteLine("[FivePD-GangWarfare]: Setting => " + ambientVehicleChance + " chance of ambient vehicle spawning");
 
                 // Parse stored vehicle model strings
                 JArray jarr = (JArray)configFile["config"]["ambientVehicle"]["vehicleModels"];
                 ambientVehicleModels = jarr.ToObject<string[]>();
-                Debug.WriteLine("[FivePD-GangWarfare]: Parsed " + ambientVehicleModels.Length + " vehicles");
 
                 // Parse stored weapon model strings
                 jarr = (JArray)configFile["config"]["weapons"];
                 weaponModels = jarr.ToObject<string[]>();
-                Debug.WriteLine("[FivePD-GangWarfare]: Parsed " + weaponModels.Length + " weapons");
 
                 // Parse stored gang ped model strings
                 jarr = (JArray)configFile["config"]["gangPedModels"]["gangA"];
@@ -55,7 +50,15 @@ namespace FivePD_GangWarfare
                 jarr = (JArray)configFile["config"]["gangPedModels"]["gangB"];
                 pedModelsB = jarr.ToObject<string[]>();
 
-                Debug.WriteLine("[FivePD-GangWarfare]: Parsed " + (pedModelsA.Length + pedModelsB.Length) + " ped models");
+                if ((bool)configFile["config"]["debug"]["debugPrint"])
+                {
+                    Debug.WriteLine("[FivePD-GangWarfare]: Setting => minimum of " + minAmountOfMembers + " gang members");
+                    Debug.WriteLine("[FivePD-GangWarfare]: Setting => maximum of " + maxAmountOfMembers + " gang members");
+                    Debug.WriteLine("[FivePD-GangWarfare]: Setting => " + ambientVehicleChance + " chance of ambient vehicle spawning");
+                    Debug.WriteLine("[FivePD-GangWarfare]: Parsed " + ambientVehicleModels.Length + " vehicles");
+                    Debug.WriteLine("[FivePD-GangWarfare]: Parsed " + weaponModels.Length + " weapons");
+                    Debug.WriteLine("[FivePD-GangWarfare]: Parsed " + (pedModelsA.Length + pedModelsB.Length) + " ped models");
+                }
             }
             catch (Exception ex)
             {
